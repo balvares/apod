@@ -1,6 +1,6 @@
 import '../entities/apod_entity.dart';
 
-abstract class APODRepository {
+abstract interface class APODRepository {
   Future<APODEntity> getAPOD({required DateTime date});
 
   Future<List<APODEntity>> getAPODByDateRange({

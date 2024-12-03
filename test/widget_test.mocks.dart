@@ -70,7 +70,7 @@ class MockAPODRepository extends _i1.Mock implements _i5.APODRepository {
   }
 
   @override
-  _i4.Future<_i2.APODEntity> getAPOD(any, {required DateTime? date}) =>
+  _i4.Future<_i2.APODEntity> getAPOD({required DateTime? date}) =>
       (super.noSuchMethod(
         Invocation.method(
           #getAPOD,
