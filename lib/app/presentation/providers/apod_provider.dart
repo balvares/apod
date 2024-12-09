@@ -16,11 +16,15 @@ class APODProvider with ChangeNotifier {
     _initialize();
   }
 
+  final TextEditingController nameController = TextEditingController();
+
   APODEntity? apod;
   APODEntity? todayApod;
 
   var _apodList = <APODEntity>[];
   List<APODEntity> get apodList => _apodList;
+
+  List<APODEntity> filteredList = [];
 
   bool isLoading = false;
 
@@ -56,6 +60,36 @@ class APODProvider with ChangeNotifier {
 
     _apodList = await _getAPODListUseCase.call(
         startDate: DateTime(2024, 12, 01), endDate: DateTime.now());
+
+    isLoading = false;
+    notifyListeners();
+  }
+
+  Future<void> fetchAPODListWithFilter(
+      {required DateTime startDate, required DateTime endDate}) async {
+    isLoading = true;
+    notifyListeners();
+
+    _apodList = await _getAPODListUseCase.call(
+      startDate: startDate,
+      endDate: endDate,
+    );
+
+    isLoading = false;
+    notifyListeners();
+  }
+
+  Future<void> fetchAPODListByName({required String name}) async {
+    isLoading = true;
+    notifyListeners();
+
+    filteredList = apodList.where((apod) {
+      return apod.title
+          .toLowerCase()
+          .contains(nameController.text.toLowerCase());
+    }).toList();
+
+    _apodList = filteredList;
 
     isLoading = false;
     notifyListeners();
