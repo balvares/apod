@@ -13,6 +13,9 @@ class ApodListPage extends StatefulWidget {
 }
 
 class _ApodListPageState extends State<ApodListPage> {
+  DateTime? _startDate;
+  DateTime? _endDate;
+
   @override
   Widget build(BuildContext context) {
     return Consumer<APODProvider>(
@@ -20,7 +23,7 @@ class _ApodListPageState extends State<ApodListPage> {
         return Scaffold(
           appBar: CustomAppBar(
             title: 'Astronomy Picture of the Day 🪐',
-            imageUrl: provider.apod?.url ?? '',
+            imageUrl: provider.todayApod?.url ?? '',
             opacity: 0.7,
           ),
           body: provider.isLoading

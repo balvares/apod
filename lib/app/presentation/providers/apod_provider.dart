@@ -17,6 +17,7 @@ class APODProvider with ChangeNotifier {
   }
 
   APODEntity? apod;
+  APODEntity? todayApod;
 
   var _apodList = <APODEntity>[];
   List<APODEntity> get apodList => _apodList;
@@ -63,5 +64,7 @@ class APODProvider with ChangeNotifier {
   void _initialize() async {
     await fetchAPOD(DateTime.now());
     await fetchAPODList();
+    todayApod = apod;
+    notifyListeners();
   }
 }
