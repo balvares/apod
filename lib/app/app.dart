@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import 'presentation/pages/apod_page.dart';
+import 'presentation/pages/apod_list_page.dart';
 
 class APODApp extends StatelessWidget {
   const APODApp({super.key});
@@ -13,7 +13,9 @@ class APODApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
-      home: const ApodPage(),
+      // home: const ApodPage(),
+      home: const ApodListPage(),
+      debugShowCheckedModeBanner: false,
     );
   }
 }
