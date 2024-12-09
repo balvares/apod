@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:get_it/get_it.dart';
 import 'package:provider/provider.dart';
 
 import '../providers/apod_provider.dart';
@@ -11,18 +12,11 @@ class ApodPage extends StatefulWidget {
 }
 
 class _ApodPageState extends State<ApodPage> {
-  @override
-  void initState() {
-    super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      Provider.of<APODProvider>(context, listen: false).fetchAPOD();
-    });
-  }
+  final globalVars = GetIt.instance<APODProvider>();
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      // appBar: AppBar(title: const Text("Astronomy Picture of the Day 🪐")),
       body: Consumer<APODProvider>(
         builder: (context, provider, child) {
           return provider.isLoading
@@ -30,10 +24,10 @@ class _ApodPageState extends State<ApodPage> {
               : SingleChildScrollView(
                   child: Column(
                     children: [
-                      Image.network(provider.apod!.url),
+                      Image.network(provider.apod.url),
                       Padding(
                         padding: const EdgeInsets.all(16.0),
-                        child: Text(provider.apod!.title,
+                        child: Text(provider.apod.title,
                             style: const TextStyle(
                               fontSize: 24,
                               fontWeight: FontWeight.bold,
@@ -41,7 +35,7 @@ class _ApodPageState extends State<ApodPage> {
                       ),
                       Padding(
                         padding: const EdgeInsets.all(16.0),
-                        child: Text(provider.apod!.explanation),
+                        child: Text(provider.apod.explanation),
                       ),
                     ],
                   ),

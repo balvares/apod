@@ -15,6 +15,7 @@ dependencies:
   intl: any
   mockito: any
   build_runner: any
+  get_it: any
 
   cupertino_icons: ^1.0.8
 

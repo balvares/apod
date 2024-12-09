@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:get_it/get_it.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
 import '../providers/apod_provider.dart';
+import '../widgets/custom_app_bar.dart';
 
 class ApodListPage extends StatefulWidget {
   const ApodListPage({super.key});
@@ -12,13 +14,7 @@ class ApodListPage extends StatefulWidget {
 }
 
 class _ApodListPageState extends State<ApodListPage> {
-  @override
-  void initState() {
-    super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      Provider.of<APODProvider>(context, listen: false).fetchAPODList();
-    });
-  }
+  final globalVars = GetIt.instance<APODProvider>();
 
   final List<String> imageUrls = [
     'https://picsum.photos/id/1018/1000/600',
@@ -29,20 +25,25 @@ class _ApodListPageState extends State<ApodListPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('ListView Example'),
-      ),
-      body: ListView.builder(
-        itemCount:
-            imageUrls.length, // Change this to the desired number of items
-        itemBuilder: (context, index) {
-          return ListItem(
-            imageUrl: imageUrls[index % imageUrls.length],
-            date: DateTime.now().add(Duration(days: index)),
-          );
-        },
-      ),
+    return Consumer<APODProvider>(
+      builder: (context, provider, child) {
+        return Scaffold(
+          appBar: const CustomAppBar(
+            title: 'Astronomy Picture of the Day 🪐',
+            imageUrl: 'https://picsum.photos/id/1018/1000/600',
+            opacity: 0.7,
+          ),
+          body: ListView.builder(
+            itemCount: imageUrls.length,
+            itemBuilder: (context, index) {
+              return ListItem(
+                imageUrl: imageUrls[index % imageUrls.length],
+                date: DateTime.now().add(Duration(days: index)),
+              );
+            },
+          ),
+        );
+      },
     );
   }
 }

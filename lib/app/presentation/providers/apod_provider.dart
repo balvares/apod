@@ -12,19 +12,51 @@ class APODProvider with ChangeNotifier {
     required GetAPODUsecase getAPODUseCase,
     required GetAPODListUsecase getAPODListUseCase,
   })  : _getAPODUseCase = getAPODUseCase,
-        _getAPODListUseCase = getAPODListUseCase;
+        _getAPODListUseCase = getAPODListUseCase {
+    _initialize();
+  }
 
-  APODEntity? apod;
-  List<APODEntity> apodList = [];
+  var _apod;
+  APODEntity get apod => _apod;
+
+  var _apodList;
+  List<APODEntity> get apodList => _apodList;
+
   bool isLoading = false;
   String? error;
+
+  Future<void> _initialize() async {
+    try {
+      await fetchAPOD();
+      await fetchAPODList();
+    } catch (e) {
+      error = e.toString();
+      notifyListeners();
+    }
+  }
+
+  void showError(BuildContext context) async {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: const Text('Hello! This is a SnackBar.'),
+        duration: const Duration(seconds: 3), // Duração do SnackBar
+        action: SnackBarAction(
+          label: 'Tentar novamente',
+          onPressed: () async {
+            await fetchAPOD();
+            await fetchAPODList();
+          },
+        ),
+      ),
+    );
+  }
 
   Future<void> fetchAPOD() async {
     isLoading = true;
     error = null;
     notifyListeners();
 
-    apod = await _getAPODUseCase.call(date: DateTime.now());
+    _apod = await _getAPODUseCase.call(date: DateTime.now());
 
     isLoading = false;
     notifyListeners();
@@ -35,7 +67,7 @@ class APODProvider with ChangeNotifier {
     error = null;
     notifyListeners();
 
-    apodList = await _getAPODListUseCase.call(
+    _apodList = await _getAPODListUseCase.call(
         startDate: DateTime.now(), endDate: DateTime.now());
 
     isLoading = false;
