@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:get_it/get_it.dart';
-import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
 import '../providers/apod_provider.dart';
 import '../widgets/custom_app_bar.dart';
+import '../widgets/list_item.dart';
 
 class ApodListPage extends StatefulWidget {
   const ApodListPage({super.key});
@@ -14,93 +13,31 @@ class ApodListPage extends StatefulWidget {
 }
 
 class _ApodListPageState extends State<ApodListPage> {
-  final globalVars = GetIt.instance<APODProvider>();
-
-  final List<String> imageUrls = [
-    'https://picsum.photos/id/1018/1000/600',
-    'https://picsum.photos/id/1015/1000/600',
-    'https://picsum.photos/id/1019/1000/600',
-    // Add more image URLs as needed
-  ];
-
   @override
   Widget build(BuildContext context) {
     return Consumer<APODProvider>(
       builder: (context, provider, child) {
         return Scaffold(
-          appBar: const CustomAppBar(
+          appBar: CustomAppBar(
             title: 'Astronomy Picture of the Day 🪐',
-            imageUrl: 'https://picsum.photos/id/1018/1000/600',
+            imageUrl: provider.apod?.url ?? '',
             opacity: 0.7,
           ),
-          body: ListView.builder(
-            itemCount: imageUrls.length,
-            itemBuilder: (context, index) {
-              return ListItem(
-                imageUrl: imageUrls[index % imageUrls.length],
-                date: DateTime.now().add(Duration(days: index)),
-              );
-            },
-          ),
+          body: provider.isLoading
+              ? const Center(child: CircularProgressIndicator())
+              : provider.apodList.isEmpty
+                  ? const Center(child: Text('No data available'))
+                  : ListView.builder(
+                      itemCount: provider.apodList.length,
+                      itemBuilder: (context, index) {
+                        return ListItem(
+                          imageUrl: provider.apodList[index].url,
+                          date: DateTime.parse(provider.apodList[index].date),
+                        );
+                      },
+                    ),
         );
       },
-    );
-  }
-}
-
-class ListItem extends StatelessWidget {
-  final String imageUrl;
-  final DateTime date;
-
-  const ListItem({
-    super.key,
-    required this.imageUrl,
-    required this.date,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      height: 200,
-      margin: const EdgeInsets.symmetric(vertical: 10, horizontal: 15),
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(15),
-        image: DecorationImage(
-          image: NetworkImage(imageUrl),
-          fit: BoxFit.cover,
-        ),
-      ),
-      child: Stack(
-        children: [
-          Positioned(
-            top: 10,
-            left: 10,
-            child: Container(
-              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-              decoration: BoxDecoration(
-                color: Colors.black.withOpacity(0.7),
-                borderRadius: BorderRadius.circular(5),
-              ),
-              child: Text(
-                DateFormat('MMM d, yyyy').format(date),
-                style: const TextStyle(color: Colors.white),
-              ),
-            ),
-          ),
-          Positioned(
-            bottom: 10,
-            right: 10,
-            child: ElevatedButton(
-              onPressed: () {
-                // Add button functionality here
-                print(
-                    'Button pressed for date: ${DateFormat('MMM d, yyyy').format(date)}');
-              },
-              child: const Text('Details'),
-            ),
-          ),
-        ],
-      ),
     );
   }
 }

@@ -9,13 +9,9 @@ import '../models/apod_model.dart';
 import 'interfaces/apod_remote_datasource.dart';
 
 class APODRemoteDataSourceImpl implements APODRemoteDataSource {
-  final http.Client _client;
+  final http.Client _client = http.Client();
 
   final String apiUrl = '$baseUrl?api_key=$apiKey';
-
-  APODRemoteDataSourceImpl({
-    required http.Client client,
-  }) : _client = client;
 
   @override
   Future<APODEntity> getAPOD({required String date}) async {

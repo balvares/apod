@@ -1,33 +1,49 @@
 import 'package:flutter/material.dart';
-import 'package:get_it/get_it.dart';
+import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
 import '../providers/apod_provider.dart';
 
 class ApodPage extends StatefulWidget {
-  const ApodPage({super.key});
+  const ApodPage({super.key, required this.date});
+
+  final DateTime date;
 
   @override
   State<ApodPage> createState() => _ApodPageState();
 }
 
 class _ApodPageState extends State<ApodPage> {
-  final globalVars = GetIt.instance<APODProvider>();
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      Provider.of<APODProvider>(context, listen: false).fetchAPOD(widget.date);
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Consumer<APODProvider>(
-        builder: (context, provider, child) {
-          return provider.isLoading
+    return Consumer<APODProvider>(
+      builder: (context, provider, child) {
+        return Scaffold(
+          appBar: AppBar(
+            title: Text(DateFormat('MMM d, yyyy').format(widget.date)),
+            backgroundColor: Colors.transparent,
+            leading: IconButton(
+              onPressed: () => Navigator.pop(context),
+              icon: const Icon(Icons.arrow_back),
+            ),
+          ),
+          body: provider.isLoading
               ? const Center(child: CircularProgressIndicator())
               : SingleChildScrollView(
                   child: Column(
                     children: [
-                      Image.network(provider.apod.url),
+                      Image.network(provider.apod?.url ?? ''),
                       Padding(
                         padding: const EdgeInsets.all(16.0),
-                        child: Text(provider.apod.title,
+                        child: Text(provider.apod?.title ?? '',
                             style: const TextStyle(
                               fontSize: 24,
                               fontWeight: FontWeight.bold,
@@ -35,18 +51,17 @@ class _ApodPageState extends State<ApodPage> {
                       ),
                       Padding(
                         padding: const EdgeInsets.all(16.0),
-                        child: Text(provider.apod.explanation),
+                        child: Text(provider.apod?.explanation ?? ''),
                       ),
                     ],
                   ),
-                );
-        },
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () =>
-            Provider.of<APODProvider>(context, listen: false).fetchAPOD(),
-        child: const Icon(Icons.refresh),
-      ),
+                ),
+          floatingActionButton: FloatingActionButton(
+            onPressed: () => provider.fetchAPOD(DateTime.now()),
+            child: const Icon(Icons.refresh),
+          ),
+        );
+      },
     );
   }
 }

@@ -16,47 +16,34 @@ class APODProvider with ChangeNotifier {
     _initialize();
   }
 
-  var _apod;
-  APODEntity get apod => _apod;
+  APODEntity? apod;
 
-  var _apodList;
+  var _apodList = <APODEntity>[];
   List<APODEntity> get apodList => _apodList;
 
   bool isLoading = false;
-  String? error;
 
-  Future<void> _initialize() async {
-    try {
-      await fetchAPOD();
-      await fetchAPODList();
-    } catch (e) {
-      error = e.toString();
-      notifyListeners();
-    }
-  }
+  // void showError(BuildContext context) async {
+  //   ScaffoldMessenger.of(context).showSnackBar(
+  //     SnackBar(
+  //       content: const Text('Hello! This is a SnackBar.'),
+  //       duration: const Duration(seconds: 3), // Duração do SnackBar
+  //       action: SnackBarAction(
+  //         label: 'Tentar novamente',
+  //         onPressed: () async {
+  //           // await fetchAPOD(DateTime.now());
+  //           await fetchAPODList();
+  //         },
+  //       ),
+  //     ),
+  //   );
+  // }
 
-  void showError(BuildContext context) async {
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: const Text('Hello! This is a SnackBar.'),
-        duration: const Duration(seconds: 3), // Duração do SnackBar
-        action: SnackBarAction(
-          label: 'Tentar novamente',
-          onPressed: () async {
-            await fetchAPOD();
-            await fetchAPODList();
-          },
-        ),
-      ),
-    );
-  }
-
-  Future<void> fetchAPOD() async {
+  Future<void> fetchAPOD(DateTime date) async {
     isLoading = true;
-    error = null;
     notifyListeners();
 
-    _apod = await _getAPODUseCase.call(date: DateTime.now());
+    apod = await _getAPODUseCase.call(date: date);
 
     isLoading = false;
     notifyListeners();
@@ -64,13 +51,17 @@ class APODProvider with ChangeNotifier {
 
   Future<void> fetchAPODList() async {
     isLoading = true;
-    error = null;
     notifyListeners();
 
     _apodList = await _getAPODListUseCase.call(
-        startDate: DateTime.now(), endDate: DateTime.now());
+        startDate: DateTime(2024, 12, 01), endDate: DateTime.now());
 
     isLoading = false;
     notifyListeners();
+  }
+
+  void _initialize() async {
+    await fetchAPOD(DateTime.now());
+    await fetchAPODList();
   }
 }
