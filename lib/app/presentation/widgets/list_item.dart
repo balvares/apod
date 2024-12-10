@@ -5,20 +5,22 @@ import 'package:intl/intl.dart';
 class ListItem extends StatelessWidget {
   final String imageUrl;
   final DateTime date;
+  final String name;
 
   const ListItem({
     super.key,
     required this.imageUrl,
     required this.date,
+    required this.name,
   });
 
   @override
   Widget build(BuildContext context) {
     return Container(
       height: 200,
-      margin: const EdgeInsets.symmetric(vertical: 10, horizontal: 15),
+      margin: const EdgeInsets.symmetric(vertical: 0, horizontal: 0),
       decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(15),
+        borderRadius: BorderRadius.circular(0),
         image: DecorationImage(
           image: NetworkImage(imageUrl),
           fit: BoxFit.cover,
@@ -40,6 +42,11 @@ class ListItem extends StatelessWidget {
                 style: const TextStyle(color: Colors.white),
               ),
             ),
+          ),
+          Positioned(
+            bottom: 10,
+            left: 10,
+            child: Text(name),
           ),
           Positioned(
             bottom: 10,

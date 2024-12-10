@@ -210,6 +210,13 @@ class _ApodListPageState extends State<ApodListPage> {
           provider.fetchAPODListByName(
             name: provider.nameController.text,
           );
+        } else if (_startDate != null && _endDate != null) {
+          provider.fetchAPODListWithFilter(
+            startDate: _startDate ?? DateTime.now(),
+            endDate: _endDate ?? DateTime.now(),
+          );
+        } else {
+          provider.fetchAPODList();
         }
       },
       icon: const Icon(Icons.search),
@@ -224,6 +231,8 @@ class _ApodListPageState extends State<ApodListPage> {
     return ElevatedButton.icon(
       onPressed: () {
         provider.nameController.text = "";
+        _startDate = null;
+        _endDate = null;
         provider.fetchAPODList();
       },
       icon: const Icon(Icons.clear),
@@ -246,6 +255,7 @@ class _ApodListPageState extends State<ApodListPage> {
                     return ListItem(
                       imageUrl: provider.apodList[index].url,
                       date: DateTime.parse(provider.apodList[index].date),
+                      name: provider.apodList[index].title,
                     );
                   },
                 ),

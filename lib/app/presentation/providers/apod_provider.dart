@@ -48,12 +48,14 @@ class APODProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> fetchAPODList() async {
+  Future<void> fetchAPODList({DateTime? startDate, DateTime? endDate}) async {
     isLoading = true;
     notifyListeners();
 
     _apodList = await _getAPODListUseCase.call(
-        startDate: DateTime(2024, 12, 01), endDate: DateTime.now());
+      startDate: startDate ?? DateTime.now().subtract(const Duration(days: 7)),
+      endDate: endDate ?? DateTime.now(),
+    );
 
     isLoading = false;
     notifyListeners();
