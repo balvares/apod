@@ -12,7 +12,7 @@ class GetAPODListUseCaseImpl implements GetAPODListUsecase {
     required DateTime startDate,
     required DateTime endDate,
   }) {
-    return repository.getAPODByDateRange(
+    return repository.getAPODList(
       startDate: startDate,
       endDate: endDate,
     );

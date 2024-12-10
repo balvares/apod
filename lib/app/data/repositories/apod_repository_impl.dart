@@ -17,11 +17,11 @@ class APODRepositoryImpl implements APODRepository {
   }
 
   @override
-  Future<List<APODEntity>> getAPODByDateRange({
+  Future<List<APODEntity>> getAPODList({
     required DateTime startDate,
     required DateTime endDate,
-  }) {
-    return _dataSource.getAPODByDateRange(
+  }) async {
+    return await _dataSource.getAPODList(
       startDate: DateFormat('yyyy-MM-dd').format(startDate),
       endDate: DateFormat('yyyy-MM-dd').format(endDate),
     );

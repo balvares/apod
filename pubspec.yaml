@@ -16,8 +16,10 @@ dependencies:
   mockito: any
   build_runner: any
   get_it: any
+  sqflite: any
 
   cupertino_icons: ^1.0.8
+  path: ^1.9.0
 
 dev_dependencies:
   flutter_test:

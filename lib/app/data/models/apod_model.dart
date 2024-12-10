@@ -5,7 +5,7 @@ class APODModel extends APODEntity {
     required super.title,
     required super.explanation,
     required super.url,
-    super.date,
+    required super.date,
   });
 
   factory APODModel.fromJson(Map<String, dynamic> json) {
@@ -21,5 +21,14 @@ class APODModel extends APODEntity {
     return listJson
         .map((e) => APODModel.fromJson(e as Map<String, dynamic>))
         .toList();
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'date': date,
+      'title': title,
+      'explanation': explanation,
+      'url': url,
+    };
   }
 }

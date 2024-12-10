@@ -40,7 +40,12 @@ class _ApodPageState extends State<ApodPage> {
               : SingleChildScrollView(
                   child: Column(
                     children: [
-                      Image.network(provider.apod?.url ?? ''),
+                      Image.network(
+                        provider.apod?.url ?? '',
+                        errorBuilder: (context, error, stackTrace) {
+                          return Container(); // Returns an empty container if there's an error
+                        },
+                      ),
                       Padding(
                         padding: const EdgeInsets.all(16.0),
                         child: Text(provider.apod?.title ?? '',
