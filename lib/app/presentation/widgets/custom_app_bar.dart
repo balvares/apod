@@ -1,6 +1,7 @@
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 import '../pages/apod_page.dart';
 
@@ -62,6 +63,23 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
                             fontSize: 16,
                             color: Colors.black,
                             fontWeight: FontWeight.normal,
+                          ),
+                        ),
+                      ),
+                    ),
+                    Align(
+                      alignment: Alignment.topRight,
+                      child: Padding(
+                        padding: const EdgeInsets.only(left: 16.0, bottom: 8.0),
+                        child: Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Text(
+                            'Hello! Today is ${DateFormat('MMM d').format(DateTime.now())}',
+                            style: const TextStyle(
+                              fontSize: 16,
+                              color: Colors.black,
+                              fontWeight: FontWeight.normal,
+                            ),
                           ),
                         ),
                       ),
