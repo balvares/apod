@@ -46,7 +46,17 @@ class ListItem extends StatelessWidget {
           Positioned(
             bottom: 10,
             left: 10,
-            child: Text(name),
+            child: Container(
+              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+              decoration: BoxDecoration(
+                color: Colors.black.withOpacity(0.7),
+                borderRadius: BorderRadius.circular(5),
+              ),
+              child: Text(
+                name,
+                style: const TextStyle(color: Colors.white),
+              ),
+            ),
           ),
           Positioned(
             bottom: 10,

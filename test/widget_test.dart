@@ -21,7 +21,8 @@
 
 //     setUp(() {
 //       mockUseCase = MockGetAPODUsecase();
-//       provider = APODProvider(getAPODUseCase: mockUseCase, getAPODListUseCase: getApodListUseCase);
+//       provider = APODProvider(
+//           getAPODUseCase: mockUseCase, getAPODListUseCase: getApodListUseCase);
 //       mockRepository = MockAPODRepository();
 //       getApodUseCase = GetAPODUseCaseImpl(repository: mockRepository);
 //     });
