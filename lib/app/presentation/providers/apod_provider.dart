@@ -27,22 +27,16 @@ class APODProvider with ChangeNotifier {
   List<APODEntity> filteredList = [];
 
   bool isLoading = false;
+  bool showFilterSection = false;
 
-  // void showError(BuildContext context) async {
-  //   ScaffoldMessenger.of(context).showSnackBar(
-  //     SnackBar(
-  //       content: const Text('Hello! This is a SnackBar.'),
-  //       duration: const Duration(seconds: 3), // Duração do SnackBar
-  //       action: SnackBarAction(
-  //         label: 'Tentar novamente',
-  //         onPressed: () async {
-  //           // await fetchAPOD(DateTime.now());
-  //           await fetchAPODList();
-  //         },
-  //       ),
-  //     ),
-  //   );
-  // }
+  void showError(BuildContext context, String error) async {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(error),
+        duration: const Duration(seconds: 3), // Duração do SnackBar
+      ),
+    );
+  }
 
   Future<void> fetchAPOD(DateTime date) async {
     isLoading = true;
@@ -92,6 +86,11 @@ class APODProvider with ChangeNotifier {
     _apodList = filteredList;
 
     isLoading = false;
+    notifyListeners();
+  }
+
+  void toggleFilters() {
+    showFilterSection = !showFilterSection;
     notifyListeners();
   }
 
